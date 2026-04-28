@@ -20,15 +20,15 @@ class App {
   gui!: dat.GUI;
 
   constructor(canvas: HTMLCanvasElement) {
+    this.animate = this.animate.bind(this);
     this.canvas = canvas;
     this.initRenderer();
     this.initCamera();
     this.initScene();
     this.initHelpers();
+    this.initGUI();
     this.initObjects();
-
-    this.renderer.render(this.scene, this.camera);
-    // this.animate();
+    this.animate();
   }
 
   initRenderer() {
@@ -66,6 +66,15 @@ class App {
   initObjects() {
     this.cube = new Cube(this.gui);
     this.scene.add(this.cube.mesh);
+  }
+
+  initGUI() {
+    this.gui = new dat.GUI();
+  }
+
+  animate() {
+    this.renderer.render(this.scene, this.camera);
+    requestAnimationFrame(this.animate);
   }
 }
 
