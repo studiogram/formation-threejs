@@ -1,15 +1,21 @@
 import "@/style.css";
 import "./style.css";
 import {
+  AmbientLight,
   AxesHelper,
   CameraHelper,
+  DirectionalLight,
+  DirectionalLightHelper,
   GridHelper,
+  PCFShadowMap,
+  PCFSoftShadowMap,
   PerspectiveCamera,
   Scene,
   WebGLRenderer,
 } from "three";
 import { Cube } from "./Cube";
 import * as dat from "dat.gui";
+import { Ground } from "./Ground";
 
 class App {
   canvas: HTMLCanvasElement;
@@ -17,6 +23,7 @@ class App {
   camera!: PerspectiveCamera;
   scene!: Scene;
   cube!: Cube;
+  ground!: Ground;
   gui!: dat.GUI;
 
   constructor(canvas: HTMLCanvasElement) {
@@ -29,6 +36,7 @@ class App {
       this.initHelpers();
       this.initGUI();
     }
+    this.initLights();
     this.initObjects();
     this.animate();
   }
@@ -36,10 +44,13 @@ class App {
   initRenderer() {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
-      alpha: true,
+      antialias: true,
+      // alpha: true,
     });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = PCFShadowMap;
   }
 
   initCamera() {
@@ -65,9 +76,24 @@ class App {
     this.scene.add(axesHelper);
   }
 
+  initLights() {
+    console.log("initLights");
+    const ambient = new AmbientLight(0xffffff, 1);
+    this.scene.add(ambient);
+
+    const dirLight = new DirectionalLight(0xffffff, 3);
+    dirLight.position.set(5, 5, 5);
+    dirLight.castShadow = true;
+    this.scene.add(dirLight);
+    const helper = new DirectionalLightHelper(dirLight, 5);
+    this.scene.add(helper);
+  }
+
   initObjects() {
     this.cube = new Cube(this.gui);
     this.scene.add(this.cube.mesh);
+    this.ground = new Ground(this.gui);
+    this.scene.add(this.ground.mesh);
   }
 
   initGUI() {

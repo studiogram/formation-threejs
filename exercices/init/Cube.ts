@@ -1,4 +1,4 @@
-import { BoxGeometry, MathUtils, Mesh, MeshNormalMaterial } from "three";
+import { BoxGeometry, MathUtils, Mesh, MeshStandardMaterial } from "three";
 import * as dat from "dat.gui";
 
 export class Cube {
@@ -6,11 +6,18 @@ export class Cube {
   gui!: dat.GUI;
 
   constructor(gui?: dat.GUI) {
-    const geometry = new BoxGeometry(3, 3, 3);
-    const material = new MeshNormalMaterial();
+    const geometry = new BoxGeometry(1, 1, 1);
+    const material = new MeshStandardMaterial({
+      color: 0x39df2d,
+      metalness: 0.7,
+      roughness: 0.2,
+    });
     this.mesh = new Mesh(geometry, material);
     this.mesh.rotation.y = MathUtils.degToRad(45);
-    this.mesh.scale.set(0.3, 0.3, 0.3);
+
+    this.mesh.castShadow = true;
+    this.mesh.position.y = 0.5;
+
     if (import.meta.env.VITE_ENVIRONMENT == "development" && gui) {
       this.gui = gui;
       this.initGUI();
@@ -18,6 +25,6 @@ export class Cube {
   }
 
   initGUI() {
-    this.gui.add(this.mesh.position, "y").min(0).max(5).step(1);
+    this.gui.add(this.mesh.position, "y").min(0).max(5).step(0.1);
   }
 }
