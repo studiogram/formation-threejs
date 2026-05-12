@@ -8,7 +8,6 @@ import {
   DirectionalLightHelper,
   GridHelper,
   PCFShadowMap,
-  PCFSoftShadowMap,
   PerspectiveCamera,
   Scene,
   WebGLRenderer,
