@@ -1,16 +1,24 @@
-import { Mesh, MeshStandardMaterial, PlaneGeometry } from "three";
+import {
+  Mesh,
+  MeshStandardMaterial,
+  PlaneGeometry,
+  TextureLoader,
+} from "three";
 
 export class Ground {
   mesh: Mesh;
   gui!: dat.GUI;
-  material!: MeshStandardMaterial;
 
   constructor(gui?: dat.GUI) {
     const geometry = new PlaneGeometry(3, 3);
-    this.material = new MeshStandardMaterial({
-      color: 0xff0000,
+    const loader = new TextureLoader();
+    const texture = loader.load("./motel.jpg");
+    const material = new MeshStandardMaterial({
+      //   color: 0xff0000,
+      map: texture,
     });
-    this.mesh = new Mesh(geometry, this.material);
+
+    this.mesh = new Mesh(geometry, material);
     this.mesh.rotation.x = -Math.PI / 2;
     this.mesh.receiveShadow = true;
 
