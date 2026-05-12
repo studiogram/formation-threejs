@@ -5,7 +5,6 @@ import {
   AxesHelper,
   CameraHelper,
   DirectionalLight,
-  DirectionalLightHelper,
   GridHelper,
   PCFShadowMap,
   PerspectiveCamera,
@@ -79,13 +78,10 @@ class App {
     console.log("initLights");
     const ambient = new AmbientLight(0xffffff, 1);
     this.scene.add(ambient);
-
     const dirLight = new DirectionalLight(0xffffff, 3);
     dirLight.position.set(5, 5, 5);
     dirLight.castShadow = true;
     this.scene.add(dirLight);
-    const helper = new DirectionalLightHelper(dirLight, 5);
-    this.scene.add(helper);
   }
 
   initObjects() {

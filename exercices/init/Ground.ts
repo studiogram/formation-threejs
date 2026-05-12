@@ -8,12 +8,11 @@ import {
 export class Ground {
   mesh: Mesh;
   gui!: dat.GUI;
-  material!: MeshStandardMaterial;
 
   constructor(gui?: dat.GUI) {
     const geometry = new PlaneGeometry(3, 3);
-    this.material = new MeshStandardMaterial();
-    this.mesh = new Mesh(geometry, this.material);
+    const material = new MeshStandardMaterial();
+    this.mesh = new Mesh(geometry, material);
     this.mesh.rotation.x = -Math.PI / 2;
     this.mesh.receiveShadow = true;
 
@@ -28,7 +27,7 @@ export class Ground {
   initTexture() {
     const loader = new TextureLoader();
     const texture = loader.load("./motel.jpg");
-    this.material.map = texture;
+    (this.mesh.material as MeshStandardMaterial).map = texture;
   }
 
   initGUI() {
