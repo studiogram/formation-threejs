@@ -1,9 +1,4 @@
-import {
-  DodecahedronGeometry,
-  MathUtils,
-  Mesh,
-  MeshStandardMaterial,
-} from "three";
+import { DodecahedronGeometry, Mesh, MeshStandardMaterial } from "three";
 import * as dat from "dat.gui";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
