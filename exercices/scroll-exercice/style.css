@@ -1,0 +1,13 @@
+canvas {
+  width: 300px !important;
+  height: 300px !important;
+  /* background: blue; */
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
