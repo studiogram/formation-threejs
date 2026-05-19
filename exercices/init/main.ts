@@ -18,6 +18,7 @@ import * as dat from "dat.gui";
 import { Ground } from "./Ground";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import gsap from "gsap";
+import { ThreePerf } from "three-perf";
 
 class App {
   canvas: HTMLCanvasElement;
@@ -30,6 +31,7 @@ class App {
   controls!: OrbitControls;
   mouse!: Vector2;
   raycaster!: Raycaster;
+  perf!: ThreePerf;
 
   constructor(canvas: HTMLCanvasElement) {
     this.onResize = this.onResize.bind(this);
@@ -91,6 +93,13 @@ class App {
     this.scene.add(gridHelper);
     const axesHelper = new AxesHelper(3);
     this.scene.add(axesHelper);
+
+    this.perf = new ThreePerf({
+      anchorX: "left",
+      anchorY: "top",
+      domElement: document.body,
+      renderer: this.renderer,
+    });
   }
 
   initLights() {
@@ -131,11 +140,13 @@ class App {
   }
 
   animate() {
+    if (this.perf) this.perf.begin();
     this.renderer.render(this.scene, this.camera);
     this.controls.update();
     /* objects animation */
     this.cube.animate();
     requestAnimationFrame(this.animate);
+    if (this.perf) this.perf.end();
   }
 
   onResize() {
