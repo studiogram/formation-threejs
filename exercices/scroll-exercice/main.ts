@@ -13,7 +13,6 @@ import {
   Vector2,
   WebGLRenderer,
 } from "three";
-import { Cube } from "./Cube";
 import * as dat from "dat.gui";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import { ThreePerf } from "three-perf";
