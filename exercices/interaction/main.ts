@@ -13,11 +13,8 @@ import {
   Vector2,
   WebGLRenderer,
 } from "three";
-import { Cube } from "./Cube";
 import * as dat from "dat.gui";
-import { Ground } from "./Ground";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
-import gsap from "gsap";
 import { ThreePerf } from "three-perf";
 import { Rhino } from "./Rhino";
 
