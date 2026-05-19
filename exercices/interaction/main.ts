@@ -19,21 +19,19 @@ import { Ground } from "./Ground";
 import { OrbitControls } from "three/examples/jsm/Addons.js";
 import gsap from "gsap";
 import { ThreePerf } from "three-perf";
-import { Panda } from "./Panda";
+import { Rhino } from "./Rhino";
 
 class App {
   canvas: HTMLCanvasElement;
   renderer!: WebGLRenderer;
   camera!: PerspectiveCamera;
   scene!: Scene;
-  cube!: Cube;
-  ground!: Ground;
   gui!: dat.GUI;
   controls!: OrbitControls;
   mouse!: Vector2;
   raycaster!: Raycaster;
   perf!: ThreePerf;
-  panda!: Panda;
+  rhino!: Rhino;
 
   constructor(canvas: HTMLCanvasElement) {
     this.onResize = this.onResize.bind(this);
@@ -48,7 +46,6 @@ class App {
     }
     this.initLights();
     this.initObjects();
-    this.selectObjects();
     this.animate();
 
     window.addEventListener("resize", this.onResize);
@@ -115,28 +112,8 @@ class App {
   }
 
   initObjects() {
-    this.cube = new Cube(this.gui);
-    // this.scene.add(this.cube.mesh);
-    this.ground = new Ground(this.gui);
-    this.scene.add(this.ground.mesh);
-    this.panda = new Panda();
-    this.scene.add(this.panda.mesh);
-  }
-
-  selectObjects() {
-    let rotation = 0;
-    this.mouse = new Vector2();
-    window.addEventListener("click", (event) => {
-      this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-      this.raycaster = new Raycaster();
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-      const intersects = this.raycaster.intersectObjects([this.cube.mesh]);
-      if (intersects.length > 0) {
-        rotation += Math.PI * 2;
-        gsap.to(this.cube.mesh.rotation, { duration: 1, y: rotation });
-      }
-    });
+    this.rhino = new Rhino();
+    this.scene.add(this.rhino.mesh);
   }
 
   initGUI() {
@@ -148,7 +125,7 @@ class App {
     this.renderer.render(this.scene, this.camera);
     this.controls.update();
     /* objects animation */
-    this.cube.animate();
+
     requestAnimationFrame(this.animate);
     if (this.perf) this.perf.end();
   }
