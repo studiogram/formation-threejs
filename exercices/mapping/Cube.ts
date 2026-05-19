@@ -1,16 +1,24 @@
-import { BoxGeometry, MathUtils, Mesh, MeshStandardMaterial } from "three";
+import {
+  BoxGeometry,
+  MathUtils,
+  Mesh,
+  MeshStandardMaterial,
+  Texture,
+} from "three";
 import * as dat from "dat.gui";
 
 export class Cube {
   mesh: Mesh;
   gui!: dat.GUI;
 
-  constructor(gui?: dat.GUI) {
+  constructor(texture: Texture, gui?: dat.GUI) {
     const geometry = new BoxGeometry(1, 1, 1);
     const material = new MeshStandardMaterial({
       color: 0xffffff,
       metalness: 0.95,
       roughness: 0,
+      envMap: texture,
+      envMapIntensity: 4,
     });
     this.mesh = new Mesh(geometry, material);
     this.mesh.rotation.y = MathUtils.degToRad(45);

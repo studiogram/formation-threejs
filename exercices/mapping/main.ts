@@ -3,17 +3,19 @@ import "./style.css";
 import {
   AmbientLight,
   AxesHelper,
+  Box3,
   CameraHelper,
   CubeTextureLoader,
-  DataTexture,
   DirectionalLight,
   GridHelper,
+  MathUtils,
   PCFShadowMap,
   PerspectiveCamera,
   Raycaster,
   Scene,
   Texture,
   Vector2,
+  Vector3,
   WebGLRenderer,
 } from "three";
 import { Cube } from "./Cube";
@@ -47,16 +49,17 @@ class App {
   async init() {
     this.initRenderer();
     this.initCamera();
+    await this.initTexture();
     this.initScene();
     if (import.meta.env.VITE_ENVIRONMENT == "development") {
       this.initHelpers();
       this.initGUI();
     }
     this.initLights();
-    await this.initTexture();
     this.initObjects();
     this.selectObjects();
     this.animate();
+    this.fitScene();
 
     window.addEventListener("resize", this.onResize);
     // Retirer le zoom
@@ -102,12 +105,11 @@ class App {
       "pz.png",
       "nz.png",
     ]);
-
-    this.scene.background = this.texture;
   }
 
   initScene() {
     this.scene = new Scene();
+    // this.scene.background = this.texture;
   }
 
   initHelpers() {
@@ -137,7 +139,7 @@ class App {
   }
 
   initObjects() {
-    this.cube = new Cube(this.gui);
+    this.cube = new Cube(this.texture, this.gui);
     this.scene.add(this.cube.mesh);
     this.ground = new Ground(this.gui);
     this.scene.add(this.ground.mesh);
@@ -163,6 +165,21 @@ class App {
     this.gui = new dat.GUI();
   }
 
+  fitScene() {
+    const box = new Box3();
+    box.expandByObject(this.cube.mesh);
+    box.expandByObject(this.ground.mesh);
+    const size = box.getSize(new Vector3());
+    const center = box.getCenter(new Vector3());
+    // D = (L / 2) / tan(FOV / 2)
+    const fovRad = MathUtils.degToRad(this.camera.fov);
+    const distanceY = size.y / 2 / Math.tan(fovRad / 2);
+    const distanceX = size.x / 2 / Math.tan(fovRad / 2) / this.camera.aspect;
+    const dist = Math.max(distanceY, distanceX) + size.z / 2;
+    this.camera.position.set(center.x, center.y, center.z + dist);
+    this.camera.lookAt(center);
+  }
+
   animate() {
     if (this.perf) this.perf.begin();
     this.renderer.render(this.scene, this.camera);
@@ -177,6 +194,7 @@ class App {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.fitScene();
   }
 }
 
