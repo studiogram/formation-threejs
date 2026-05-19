@@ -18,6 +18,8 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: "black";
+  transition: 0.25s;
 }
 
 h1 {

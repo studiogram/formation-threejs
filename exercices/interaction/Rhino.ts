@@ -1,18 +1,20 @@
 import gsap from "gsap";
-import { Mesh, MeshStandardMaterial, Object3D } from "three";
+import { LoadingManager, Mesh, MeshStandardMaterial, Object3D } from "three";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 
 export class Rhino {
+  manager: LoadingManager;
   mesh = new Object3D();
 
-  constructor() {
+  constructor(manager: LoadingManager) {
+    this.manager = manager;
     console.log("rhino");
     this.init();
     window.addEventListener("mousemove", this.onMouseMove.bind(this));
   }
 
   async init() {
-    const gltfLoader = new GLTFLoader();
+    const gltfLoader = new GLTFLoader(this.manager);
     const gltf = await gltfLoader.loadAsync("./models/rhino.glb");
 
     const material = new MeshStandardMaterial({

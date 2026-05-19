@@ -6,6 +6,7 @@ import {
   CameraHelper,
   DirectionalLight,
   GridHelper,
+  LoadingManager,
   PCFShadowMap,
   PerspectiveCamera,
   Raycaster,
@@ -29,6 +30,7 @@ class App {
   raycaster!: Raycaster;
   perf!: ThreePerf;
   rhino!: Rhino;
+  manager!: LoadingManager;
 
   constructor(canvas: HTMLCanvasElement) {
     this.onResize = this.onResize.bind(this);
@@ -42,6 +44,7 @@ class App {
       this.initGUI();
     }
     this.initLights();
+    this.initLoader();
     this.initObjects();
     this.animate();
 
@@ -108,8 +111,20 @@ class App {
     this.scene.add(dirLight);
   }
 
+  initLoader() {
+    const loaderElement = document.querySelector("h1");
+    this.manager = new LoadingManager();
+    this.manager.onProgress = (url, loaded, total) => {
+      console.log(url, loaded, total);
+      if (loaderElement) loaderElement.innerText = `${(loaded / total) * 100}%`;
+    };
+    this.manager.onLoad = () => {
+      console.log("fini de charger");
+    };
+  }
+
   initObjects() {
-    this.rhino = new Rhino();
+    this.rhino = new Rhino(this.manager);
     this.scene.add(this.rhino.mesh);
   }
 
