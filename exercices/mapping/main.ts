@@ -41,15 +41,19 @@ class App {
     this.onResize = this.onResize.bind(this);
     this.animate = this.animate.bind(this);
     this.canvas = canvas;
+    this.init();
+  }
+
+  async init() {
     this.initRenderer();
     this.initCamera();
-    this.initTexture();
     this.initScene();
     if (import.meta.env.VITE_ENVIRONMENT == "development") {
       this.initHelpers();
       this.initGUI();
     }
     this.initLights();
+    await this.initTexture();
     this.initObjects();
     this.selectObjects();
     this.animate();

@@ -8,9 +8,9 @@ export class Cube {
   constructor(gui?: dat.GUI) {
     const geometry = new BoxGeometry(1, 1, 1);
     const material = new MeshStandardMaterial({
-      color: 0x39df2d,
-      metalness: 0.7,
-      roughness: 0.2,
+      color: 0xffffff,
+      metalness: 0.95,
+      roughness: 0,
     });
     this.mesh = new Mesh(geometry, material);
     this.mesh.rotation.y = MathUtils.degToRad(45);
